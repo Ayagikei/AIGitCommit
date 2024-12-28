@@ -77,6 +77,7 @@ public class GenerateCommitMessageAction extends AnAction {
                     if (commitMessageService.generateByStream()) {
                         commitMessageService.generateCommitMessageStream(
                                 diff,
+                                project,
                                 // onNext 处理每个token
                                 token -> ApplicationManager.getApplication().invokeLater(() -> {
                                     String currentMessage = commitMessage.getText();
@@ -92,7 +93,7 @@ public class GenerateCommitMessageAction extends AnAction {
                                 })
                         );
                     } else {
-                        String commitMessageFromAi = commitMessageService.generateCommitMessage(diff).trim();
+                        String commitMessageFromAi = commitMessageService.generateCommitMessage(diff, project).trim();
                         ApplicationManager.getApplication().invokeLater(() -> {
                             commitMessage.setCommitMessage(commitMessageFromAi);
                         });

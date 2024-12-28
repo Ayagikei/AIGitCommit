@@ -46,6 +46,7 @@ public class PromptInfo implements Serializable {
 
     public static List<PromptInfo> defaultPrompts() {
         List<PromptInfo> prompts = new ArrayList<>();
+        prompts.add(new PromptInfo("GitEmoji", PromptUtil.DEFAULT_PROMPT_0));
         prompts.add(new PromptInfo("Default", PromptUtil.DEFAULT_PROMPT_1));
         prompts.add(new PromptInfo("Detailed", PromptUtil.DEFAULT_PROMPT_2));
         prompts.add(new PromptInfo("Perfect", PromptUtil.DEFAULT_PROMPT_3));

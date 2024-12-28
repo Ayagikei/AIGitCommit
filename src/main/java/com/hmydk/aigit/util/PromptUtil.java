@@ -2,6 +2,7 @@ package com.hmydk.aigit.util;
 
 import com.hmydk.aigit.config.ApiKeySettings;
 import com.hmydk.aigit.constant.Constants;
+import com.intellij.openapi.project.Project;
 
 /**
  * PromptUtil
@@ -10,17 +11,18 @@ import com.hmydk.aigit.constant.Constants;
  */
 public class PromptUtil {
 
+    public static final String DEFAULT_PROMPT_0 = getDefaultPrompt0();
     public static final String DEFAULT_PROMPT_1 = getDefaultPrompt();
     public static final String DEFAULT_PROMPT_2 = getPrompt3();
     public static final String DEFAULT_PROMPT_3 = getPrompt4();
 
-    public static String constructPrompt(String diff) {
+    public static String constructPrompt(String diff, Project currentProject) {
         String promptContent = "";
 
         // get prompt content
         ApiKeySettings settings = ApiKeySettings.getInstance();
         if (Constants.PROJECT_PROMPT.equals(settings.getPromptType())) {
-            promptContent = FileUtil.loadProjectPrompt();
+            promptContent = FileUtil.loadProjectPrompt(currentProject);
         } else {
             promptContent = settings.getCustomPrompt().getPrompt();
         }
@@ -29,9 +31,9 @@ public class PromptUtil {
         if (!promptContent.contains("{diff}")) {
             throw new IllegalArgumentException("The prompt file must contain the placeholder {diff}.");
         }
-        if (!promptContent.contains("{language}")) {
-            throw new IllegalArgumentException("The prompt file must contain the placeholder {language}.");
-        }
+//        if (!promptContent.contains("{language}")) {
+//            throw new IllegalArgumentException("The prompt file must contain the placeholder {language}.");
+//        }
 
         // replace placeholder
         promptContent = promptContent.replace("{diff}", diff);
@@ -67,6 +69,83 @@ Requirements for the commit message:
 4. Use present tense
 
 Please output only the commit message, without any additional explanations.
+                """;
+    }
+
+    private static String getDefaultPrompt0() {
+        return """
+                Generate a conventional Git commit message based on the provided code changes.
+                
+                Input:
+                Code changes: {diff}
+                
+                Format requirements:
+                [type][(optional)scope]: [gitmoji] [description]
+                
+                Possible types:
+                - feat: New feature development
+                - fix: Bug fixes
+                - docs: Documentation changes
+                - style: Code formatting (no logic changes)
+                - refactor: Code refactoring
+                - test: Test-related
+                - chore: Build/toolchain related
+                - perf: Performance optimization
+                - ci: CI configuration changes
+                - revert: Code rollback
+                
+                Possible scopes examples:
+                - api: API related changes
+                - ui: UI related changes
+                - db: Database related changes
+                
+                Gitmoji guide:
+                Core emojis:
+                - ✨ :sparkles: New features
+                - 🐛 :bug: Fix bugs
+                - 📝 :memo: Documentation updates
+                - 💄 :lipstick: UI/style updates
+                - ♻️ :recycle: Code refactoring
+                - ✅ :white_check_mark: Add tests
+                - 🔧 :wrench: Modify configuration files
+                
+                Extended emojis:
+                - ⚡️ :zap: Performance improvements
+                - 🔥 :fire: Remove code/files
+                - 🚑️ :ambulance: Critical hotfix
+                - 🔒️ :lock: Fix security issues
+                - 🚧 :construction: Work in progress
+                - ⬆️ :arrow_up: Upgrade dependencies
+                - ⬇️ :arrow_down: Downgrade dependencies
+                - 🌐 :globe_with_meridians: Internationalization
+                - 🚚 :truck: Move/rename files
+                - 🏗️ :building_construction: Architectural changes
+                - 🔍️ :mag: Improve SEO
+                
+                Description requirements:
+                1. Use {language} for description
+                2. Must start with a verb
+                3. Keep length within 20 characters
+                4. No punctuation at the end
+                5. Description must specifically reflect code changes
+                
+                Examples:
+                ✅ Good examples:
+                feat(api): ✨ Add user auth API
+                fix(ui): 🐛 Fix button click bug
+                docs: 📝 Update deploy docs
+                style: 🎨 Unify code indent
+                refactor: ♻️ Refactor login flow
+                test: ✅ Add unit tests
+                chore: 🔧 Upgrade deps version
+                
+                ❌ Examples to avoid:
+                feat: New feature (too vague)
+                fix: Fix bug (not specific)
+                feat: ✨ Made some updates (not specific)
+                style: 🎨 Changed format. (has punctuation)
+                
+                Note: The whole result should be given in {language} and the final result must NOT contain '```', Possible types and Possible scopes do not need to be translated into {language}.
                 """;
     }
 
