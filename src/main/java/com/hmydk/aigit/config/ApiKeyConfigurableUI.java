@@ -7,6 +7,8 @@ import com.hmydk.aigit.util.PromptDialogUIUtil;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.JBColor;
@@ -42,7 +44,10 @@ public class ApiKeyConfigurableUI {
 
     private JPanel clientPanel;
 
+    private Project currentProject;
+
     public ApiKeyConfigurableUI() {
+        currentProject = ProjectManager.getInstance().getOpenProjects()[0]; // Assuming the first open project is the current one
         initComponents();
         layoutComponents();
         setupListeners();

@@ -21,10 +21,10 @@ public class PromptUtil {
 
         // get prompt content
         ApiKeySettings settings = ApiKeySettings.getInstance();
-        if (Constants.PROJECT_PROMPT.equals(settings.getPromptType())) {
+        if (Constants.PROJECT_PROMPT.equals(settings.getProjectSettings(currentProject).getPromptType())) {
             promptContent = FileUtil.loadProjectPrompt(currentProject);
         } else {
-            promptContent = settings.getCustomPrompt().getPrompt();
+            promptContent = settings.getProjectSettings(currentProject).getCustomPrompt().getPrompt();
         }
 
         // check prompt content
@@ -37,7 +37,7 @@ public class PromptUtil {
 
         // replace placeholder
         promptContent = promptContent.replace("{diff}", diff);
-        promptContent = promptContent.replace("{language}", settings.getCommitLanguage());
+        promptContent = promptContent.replace("{language}", settings.getProjectSettings(currentProject).getCommitLanguage());
         return promptContent;
     }
 
