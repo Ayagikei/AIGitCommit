@@ -2,6 +2,7 @@ package com.hmydk.aigit.util;
 
 import com.hmydk.aigit.config.ApiKeySettings;
 import com.hmydk.aigit.constant.Constants;
+import com.intellij.openapi.project.Project;
 
 /**
  * PromptUtil
@@ -14,13 +15,13 @@ public class PromptUtil {
     public static final String DEFAULT_PROMPT_2 = getPrompt3();
     public static final String DEFAULT_PROMPT_3 = getPrompt4();
 
-    public static String constructPrompt(String diff) {
+    public static String constructPrompt(String diff, Project currentProject) {
         String promptContent = "";
 
         // get prompt content
         ApiKeySettings settings = ApiKeySettings.getInstance();
         if (Constants.PROJECT_PROMPT.equals(settings.getPromptType())) {
-            promptContent = FileUtil.loadProjectPrompt();
+            promptContent = FileUtil.loadProjectPrompt(currentProject);
         } else {
             promptContent = settings.getCustomPrompt().getPrompt();
         }
