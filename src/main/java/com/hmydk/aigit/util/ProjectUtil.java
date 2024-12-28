@@ -12,4 +12,12 @@ public class ProjectUtil {
         }
         return openProjects[0];
     }
+
+    public static String getCurrentProjectName() {
+        return getCurrentProject().getName();
+    }
+
+    public static String getCurrentProjectId() {
+        return getCurrentProject().getBasePath();
+    }
 }
